@@ -28,5 +28,9 @@ void heap_collect()
 
 int main()
 {
-	void *root = heap_alloc(69);
+	char *root = heap_alloc(26);
+	for (int i = 0; i < 26; ++i){
+		root[i] = i+ 'A';
+	}
+	return 0;
 }
