@@ -4,19 +4,37 @@
 
 #define HEAP_CAP 640000
 #define HEAP_ALLOCED_CAP 1024
-
-char heap[HEAP_CAP] = {0};
-size_t heap_size = 0;
-
+#define HEAP_FREED_CAP 1024
+ 
 typedef struct
 {
 	void *start;
 	size_t size;
-} Heap_Chunk;
+} Chunk;
+typedef struct 
+{
+	size_t size;
+	Chunk chunks[HEAP_ALLOCED_CAP];
 
-Heap_Chunk heap_alloced[HEAP_ALLOCED_CAP] ={0};
-size_t heap_alloced_size = 0;	
+}Chunk_List;
 
+int chunk_list_find(const Chunk_List *list, void *ptr)
+{
+	assert(false && "TODO : chunk_list_find is not implemented");
+	return -1;
+}
+
+void chunk_list_remove(const Chunk_List *list, size_t index)
+{
+	assert(false && "TODO : chunk_list_remove is not implemented");
+	return -1;
+}
+
+char heap[Heap_CAP] ={0}
+size_t heap_size = 0;
+ 
+Chunk_List alloced_chunks = {0};
+Chunk_List freed_chunks = {0};
 
 void *heap_alloc(size_t size)
 {
@@ -25,7 +43,7 @@ void *heap_alloc(size_t size)
 	void *result = heap + heap_size;	// Begining of the chunk
 	heap_size +=size;	// Size of the chunk
 	
-	const Heap_Chunk chunk = {
+	const Chunk chunk = {
 	.start = result,
 	.size = size
 	};
@@ -49,6 +67,13 @@ void heap_dump_alloced_chunks(void){
 
 void heap_free(void *ptr)
 {
+	for (size_t i = 0; i < heap_alloced_size; ++i)
+	{
+		if(heap_alloced[i].start == ptr)
+		{
+
+		}
+	}
 	(void) ptr;
 	assert(false && "TODO : heap_free is not implemented");
 
