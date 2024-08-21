@@ -16,6 +16,7 @@ void *heap_alloc(size_t size)
 
 void heap_free(void *ptr)
 {
+	(void) ptr;
 	assert(false && "TODO : heap_free is not implemented");
 
 }
@@ -28,9 +29,11 @@ void heap_collect()
 
 int main()
 {
+	printf("Program started.\n");
 	char *root = heap_alloc(26);
 	for (int i = 0; i < 26; ++i){
 		root[i] = i+ 'A';
 	}
+	printf("End Program.");
 	return 0;
 }
