@@ -11,6 +11,7 @@ typedef struct
 	void *start;
 	size_t size;
 } Chunk;
+
 typedef struct 
 {
 	size_t size;
@@ -23,11 +24,13 @@ int chunk_list_find(const Chunk_List *list, void *ptr)
 	assert(false && "TODO : chunk_list_find is not implemented");
 	return -1;
 }
-
+void chunk_list_insert(const Chunk_List *List, void *ptr, size_t size)
+{
+	assert(false && "TODO : chunk_list_insert is not implemented");
+}
 void chunk_list_remove(const Chunk_List *list, size_t index)
 {
 	assert(false && "TODO : chunk_list_remove is not implemented");
-	return -1;
 }
 
 char heap[Heap_CAP] ={0}
@@ -40,19 +43,14 @@ void *heap_alloc(size_t size)
 {
 	if (size > 0){
 	assert(heap_size + size <= HEAP_CAP);
-	void *result = heap + heap_size;	// Begining of the chunk
-	heap_size +=size;	// Size of the chunk
-	
-	const Chunk chunk = {
-	.start = result,
-	.size = size
-	};
-	
-	assert(heap_alloced_size < HEAP_ALLOCED_CAP);
-	heap_alloced[heap_alloced_size++] = chunk;
-
-	return result;}
-	else{return NULL;}
+	void *ptr = heap + heap_size;
+	heap_size +=size;
+	chunk_list_insert(&alloced_chunks, ptr, size);
+	return result;
+	}
+	else{
+		return NULL;
+	}
 }
 
 void heap_dump_alloced_chunks(void){
