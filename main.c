@@ -1,11 +1,20 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <stdlib.h>
+
 
 #define HEAP_CAP 640000
 #define HEAP_ALLOCED_CAP 1024
 #define HEAP_FREED_CAP 1024
- 
+#define UNEMPLEMENTED \
+	do {	\
+		fprintf(stderr,"%s:%d: TODO: %s is not implemented yet.\n",\
+				__FILE__,__LINE__,__func__);\
+		abort();\
+	}while(0)
+
+
 typedef struct
 {
 	void *start;
@@ -14,26 +23,26 @@ typedef struct
 
 typedef struct 
 {
-	size_t size;
+	size_t count;
 	Chunk chunks[HEAP_ALLOCED_CAP];
 
 }Chunk_List;
 
 int chunk_list_find(const Chunk_List *list, void *ptr)
 {
-	assert(false && "TODO : chunk_list_find is not implemented");
+	UNEMPLEMENTED;
 	return -1;
 }
 void chunk_list_insert(const Chunk_List *List, void *ptr, size_t size)
 {
-	assert(false && "TODO : chunk_list_insert is not implemented");
+	UNEMPLEMENTED;
 }
 void chunk_list_remove(const Chunk_List *list, size_t index)
 {
-	assert(false && "TODO : chunk_list_remove is not implemented");
+	UNEMPLEMENTED;
 }
 
-char heap[Heap_CAP] ={0}
+char heap[HEAP_CAP] ={0};
 size_t heap_size = 0;
  
 Chunk_List alloced_chunks = {0};
@@ -46,54 +55,45 @@ void *heap_alloc(size_t size)
 	void *ptr = heap + heap_size;
 	heap_size +=size;
 	chunk_list_insert(&alloced_chunks, ptr, size);
-	return result;
+	return ptr;
 	}
 	else{
 		return NULL;
 	}
 }
 
-void heap_dump_alloced_chunks(void){
-	printf("Allocated Chunks (%zu):\n",heap_alloced_size);
-	for (size_t i = 0; i <heap_alloced_size;++i)
+void chunk_list_dump(const Chunk_List *list){
+	printf("Allocated Chunks (%zu):\n", list->count);
+	for (size_t i = 0; i < list->count; ++i)
 	{
-		printf(" Start: %p,size: %zu\n",
-				heap_alloced[i].start,
-				heap_alloced[i].size);	
+		printf(" Start: %p,size: %zu \n",
+				list->chunks[i].start,
+				list->chunks[i].size);	
 	}
 }
 
 void heap_free(void *ptr)
 {
-	for (size_t i = 0; i < heap_alloced_size; ++i)
-	{
-		if(heap_alloced[i].start == ptr)
-		{
-
-		}
-	}
-	(void) ptr;
-	assert(false && "TODO : heap_free is not implemented");
-
+	UNEMPLEMENTED;
 }
 
 void heap_collect()
 {
-	assert(false && "TODO : heap_collect is not implemented");
+	UNEMPLEMENTED;
 }
 
 
 int main()
 {
 	for (int i = 0 ; i< 100; ++i){
-		void *p = heap_alloc(i);
+		void *p = heap_alloc(i); 
 		if (i % 2 == 0)
 		{
 			heap_free(p);
 		}
 	}
 
-	heap_dump_alloced_chunks();
+	//chunk_list_dump();
 	//heap_free(root);
 	return 0;
 }
