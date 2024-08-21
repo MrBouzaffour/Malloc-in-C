@@ -1,4 +1,4 @@
-CFLAGS=-Wall -Wextra -std=c11 -pedentic -ggdb
+CFLAGS=-g -Wall -Wextra -std=c11 -pedentic 
 heap: main.c
 	$(CC) $(CLAGS) -o heap main.c
 clean:
