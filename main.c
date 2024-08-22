@@ -5,8 +5,7 @@
 
 
 #define HEAP_CAP 640000
-#define HEAP_ALLOCED_CAP 1024
-#define HEAP_FREED_CAP 1024
+#define CHUNK_LIST_CAP 1024
 #define UNEMPLEMENTED \
 	do {	\
 		fprintf(stderr,"%s:%d: TODO: %s is not implemented yet.\n",\
@@ -24,21 +23,37 @@ typedef struct
 typedef struct 
 {
 	size_t count;
-	Chunk chunks[HEAP_ALLOCED_CAP];
+	Chunk chunks[CHUNK_LIST_CAP ];
 
 }Chunk_List;
 
 int chunk_list_find(const Chunk_List *list, void *ptr)
 {
+	(void) ptr;
+	(void) list;
 	UNEMPLEMENTED;
 	return -1;
 }
-void chunk_list_insert(const Chunk_List *List, void *ptr, size_t size)
+void chunk_list_insert(Chunk_List *list, void *start , size_t size)
 {
-	UNEMPLEMENTED;
+	assert(list->count < CHUNK_LIST_CAP);
+	list->chunks[list->count].start = start;
+	list->chunks[list->count].size = size;
+	
+	for (size_t i = list->count;
+			i > 0 && list->chunks[i].start < list->chunks[i-1].start;
+			--i)
+	{
+		const Chunk aux = list->chunks[i];
+		list->chunks[i] = list->chunks[i-1];
+		list->chunks[i-1] = aux;
+	}
+	list->count +=1;
 }
 void chunk_list_remove(const Chunk_List *list, size_t index)
 {
+	(void) list;
+	(void) index;
 	UNEMPLEMENTED;
 }
 
@@ -74,6 +89,7 @@ void chunk_list_dump(const Chunk_List *list){
 
 void heap_free(void *ptr)
 {
+	(void) ptr;
 	UNEMPLEMENTED;
 }
 
@@ -87,13 +103,13 @@ int main()
 {
 	for (int i = 0 ; i< 100; ++i){
 		void *p = heap_alloc(i); 
-		if (i % 2 == 0)
-		{
-			heap_free(p);
-		}
+		//if (i % 2 == 0)
+		//{
+		//	heap_free(p);
+		//}
 	}
 
-	//chunk_list_dump();
+	chunk_list_dump(&alloced_chunks);
 	//heap_free(root);
 	return 0;
 }
