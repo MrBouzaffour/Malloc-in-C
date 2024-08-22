@@ -89,8 +89,10 @@ void chunk_list_dump(const Chunk_List *list){
 
 void heap_free(void *ptr)
 {
-	(void) ptr;
-	UNEMPLEMENTED;
+	const int index = chunk_list_find(&alloced_chunks,ptr);
+	assert(index >=0);
+	chunk_list_insert(&freed_chunks,alloced_chunks.chunks[index].start,alloced_chunks.chunks[index].size);
+	chunk_list_remove(&alloced_chunks,(size_t)  index);
 }
 
 void heap_collect()
