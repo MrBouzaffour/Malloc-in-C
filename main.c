@@ -66,11 +66,13 @@ void chunk_list_insert(Chunk_List *list, void *start , size_t size)
 	}
 	list->count +=1;
 }
-void chunk_list_remove(const Chunk_List *list, size_t index)
+void chunk_list_remove(Chunk_List *list, size_t index)
 {
-	(void) list;
-	(void) index;
-	UNEMPLEMENTED;
+	assert(index < list->count);
+	for (size_t i = index; i < list->count-1; ++i){
+		list->chunks[i] = list->chunks[i + 1];
+	}
+	list->count --;
 }
 
 char heap[HEAP_CAP] ={0};
@@ -94,7 +96,7 @@ void *heap_alloc(size_t size)
 }
 
 void chunk_list_dump(const Chunk_List *list){
-	printf("Allocated Chunks (%zu):\n", list->count);
+	printf("Chunks (%zu):\n", list->count);
 	for (size_t i = 0; i < list->count; ++i)
 	{
 		printf(" Start: %p,size: %zu \n",
@@ -130,6 +132,7 @@ int main()
 	}
 
 	chunk_list_dump(&alloced_chunks);
+	chunk_list_dump(&freed_chunks);
 	//heap_free(root);
 	return 0;
 }
